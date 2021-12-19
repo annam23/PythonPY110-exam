@@ -5,21 +5,18 @@ from faker import Faker
 from conf import MODEL
 
 
-def main():
-    first_g = gen_function()
-    new_list = []
-    for _ in range(100):
-        new_list.append(next(first_g))
-        print(new_list)
-        with open('books_dict_json.txt', 'w', encoding='utf-8') as result_file:
-            json.dump(new_list, result_file, indent=4, ensure_ascii = False)
+def main() -> json:
+    first_g = gen_function(range(100))
+    new_list = list(first_g)
+    with open('books_dict_json.txt', 'w', encoding='utf-8') as result_file:
+        json.dump(new_list, result_file, indent=4, ensure_ascii=False)
 
 
-def gen_function(pk=1) -> dict:
-    result = {}
-    result['model'] = MODEL
-    for i in itertools.count(pk,1):
-        result['pk'] = i
+def gen_function(how_many_dict, pk=1) -> dict:
+    for i in how_many_dict:
+        result = {}
+        result['model'] = MODEL
+        result['pk'] = i+1
         result['title'] = get_title()
         result['year'] = get_year()
         result['pages'] = get_pages()
@@ -38,37 +35,31 @@ def get_title() -> str:
 
 
 def get_year() -> int:
-    year = random.randint(1997, 2008)
-    return year
+    return random.randint(1997, 2008)
 
 
 def get_pages() -> int:
-    pages = random.randint(1, 1000)
-    return pages
+    return random.randint(1, 1000)
 
 
 def get_isbn() -> str:
     fake = Faker()
     Faker.seed(0)
-    isbn = fake.unique.isbn13()
-    return isbn
+    return fake.isbn13()
 
 
 def get_rating() -> float:
-    rating = random.uniform(0, 5)
-    return rating
+    return round(random.uniform(0, 5), 2)
 
 
 def get_price() -> float:
-    price = random.uniform(100, 5000)
-    return price
+    return random.uniform(100, 5000)
 
 
 def get_author() -> list:
     fake = Faker()
     Faker.seed(0)
-    names = list(fake.unique.name() for _ in range(random.randint(1, 3)))
-    return names
+    return list(fake.unique.name() for _ in range(random.randint(1, 3)))
 
 
 if __name__ == '__main__':
