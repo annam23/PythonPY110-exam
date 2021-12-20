@@ -3,17 +3,23 @@ import random
 import itertools
 from faker import Faker
 from conf import MODEL
+fake = Faker()
 
 
 def main() -> json:
-    first_g = gen_function(range(100))
+    """
+    Функция запускает генератор, который возвращает словари (по умолчанию задается формирование 100 словарей).
+    Запись списка книг происходит в json.
+    """
+
+    first_g = gen_function(100)
     new_list = list(first_g)
     with open('books_dict_json.txt', 'w', encoding='utf-8') as result_file:
         json.dump(new_list, result_file, indent=4, ensure_ascii=False)
 
 
-def gen_function(how_many_dict, pk=1) -> dict:
-    for i in how_many_dict:
+def gen_function(how_many_dict: int, pk=1) -> dict:
+    for i in range(how_many_dict):
         result = {}
         result['model'] = MODEL
         result['pk'] = i+1
@@ -43,7 +49,6 @@ def get_pages() -> int:
 
 
 def get_isbn() -> str:
-    fake = Faker()
     Faker.seed(0)
     return fake.isbn13()
 
@@ -57,7 +62,6 @@ def get_price() -> float:
 
 
 def get_author() -> list:
-    fake = Faker()
     Faker.seed(0)
     return list(fake.unique.name() for _ in range(random.randint(1, 3)))
 
