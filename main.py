@@ -50,7 +50,7 @@ def get_pages() -> int:
 
 def get_isbn() -> str:
     Faker.seed(0)
-    return fake.isbn13()
+    return fake.unique.isbn13()
 
 
 def get_rating() -> float:
@@ -58,7 +58,7 @@ def get_rating() -> float:
 
 
 def get_price() -> float:
-    return random.uniform(100, 5000)
+    return round(random.uniform(100, 5000), 2)
 
 
 def get_author() -> list:
